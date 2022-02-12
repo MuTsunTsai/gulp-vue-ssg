@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"target": "es2019",
+		"outDir": "dist",
+		"module": "commonjs",
+		"strictNullChecks": true,
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"removeComments": true,
+	},
+	"include": [
+		"src/**/*"
+	]
+}
