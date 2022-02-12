@@ -1,7 +1,7 @@
-import through from 'through2';
-import stream from 'stream';
-import PluginError from 'plugin-error';
-import * as esbuild from 'esbuild';
+import through = require('through2');
+import stream = require('stream');
+import PluginError = require('plugin-error');
+import esbuild = require('esbuild');
 
 import { createSSRApp } from 'vue';
 import { renderToString } from 'vue/server-renderer';
