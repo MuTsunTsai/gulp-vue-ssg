@@ -3,7 +3,7 @@ import stream = require('stream');
 import PluginError = require('plugin-error');
 import esbuild = require('esbuild');
 
-import { createSSRApp } from 'vue';
+import { createSSRApp, App } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 
 import type { Component } from 'vue';
@@ -38,6 +38,7 @@ async function getRoot(options: vueSsgOption) {
 async function renderSSG(options: vueSsgOption) {
 	const App = await getRoot(options);
 	const ssg = createSSRApp(App);
+	options.appOptions?.(ssg);
 	return await renderToString(ssg);
 }
 
@@ -66,6 +67,7 @@ export = function(options: vueSsgOption): stream.Transform {
 interface vueSsgOption {
 	appRoot: string | Component;
 	plugins?: Plugin[];
+	appOptions?: (app: App) => void;
 	injectTo?: string;
 	useDOM?: boolean;
 }

@@ -7,7 +7,8 @@ const project = ts.createProject("tsconfig.json");
 export default () =>
 	project.src()
 		.pipe(newer({
-			dest: 'dist/index.js'
+			dest: 'dist/index.js',
+			extra: ['tsconfig.json'],
 		}))
 		.pipe(sourcemaps.init())
 		.pipe(project())

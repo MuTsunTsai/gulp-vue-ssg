@@ -38,6 +38,12 @@ export default () => gulp.src('src/index.htm')
 		injectTo: '__VUE_SSG__',
 
 		/**
+		 * Optional. If specify, additional operations will
+		 * be applied to the app.
+		 */
+		appOptions: app => app.use(something),
+
+		/**
 		 * Whether DOM is needed during generation. Optional.
 		 * Default value is `false`.
 		 *
