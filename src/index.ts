@@ -21,6 +21,7 @@ function requireFromString(src) {
 async function getRoot(options: vueSsgOption) {
 	if(typeof options.appRoot != 'string') return options.appRoot;
 	const result = await esbuild.build({
+		outfile: 'main.js', // this is necessary for handling sfc containing styles
 		entryPoints: [options.appRoot],
 		bundle: true,
 		treeShaking: true,
