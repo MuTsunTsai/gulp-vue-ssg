@@ -15,12 +15,16 @@
 	"author": "Mu-Tsun Tsai",
 	"license": "MIT",
 	"devDependencies": {
+		"@types/node": "^18.7.6",
+		"@vue/compiler-sfc": "^3.2.37",
+		"esbuild": "^0.15.5",
 		"esbuild-plugin-vue-next": "^0.1.4",
 		"gulp": "^4.0.2",
 		"gulp-newer": "^1.4.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-typescript": "^6.0.0-alpha.1",
 		"typescript": "^4.5.5",
+		"vinyl": "^2.2.1",
 		"vue": "^3.2.33"
 	},
 	"dependencies": {

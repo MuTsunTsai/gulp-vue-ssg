@@ -1,8 +1,10 @@
-import type stream from 'stream';
+import type { Transform } from 'stream';
 import type { Plugin } from 'esbuild';
 import type { Component } from 'vue';
 
-export default (options: vueSsgOption) => stream.Transform;
+declare const vueSsg: (options: vueSsgOption) => Transform;
+
+export default vueSsg;
 
 interface vueSsgOption {
 	/** Path of the root component .vue file, or you could also pass a pre-compiled component directly. */
