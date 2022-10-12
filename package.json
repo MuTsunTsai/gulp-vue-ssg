@@ -15,29 +15,30 @@
 	"author": "Mu-Tsun Tsai",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/node": "^18.7.6",
-		"@vue/compiler-sfc": "^3.2.37",
-		"esbuild": "^0.15.5",
+		"@types/node": "^18.8.4",
+		"@types/through2": "^2.0.36",
+		"@vue/compiler-sfc": "^3.2.40",
+		"esbuild": "^0.15.10",
 		"esbuild-plugin-vue-next": "^0.1.4",
 		"gulp": "^4.0.2",
 		"gulp-newer": "^1.4.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-typescript": "^6.0.0-alpha.1",
-		"typescript": "^4.5.5",
+		"typescript": "^4.8.4",
 		"vinyl": "^2.2.1",
-		"vue": "^3.2.33"
+		"vue": "^3.2.40"
 	},
 	"dependencies": {
 		"plugin-error": "^1.0.1",
 		"through2": "^4.0.2"
 	},
 	"peerDependencies": {
-		"esbuild": "^0.14.21",
+		"esbuild": ">=0.15.10",
 		"gulp": "^4.0.2",
 		"vue": "^3.2.30"
 	},
 	"optionalDependencies": {
-		"global-jsdom": "^8.4.0",
+		"global-jsdom": "^8.6.0",
 		"jsdom": "^19.0.0"
 	},
 	"files": [
