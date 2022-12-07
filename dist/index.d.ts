@@ -8,7 +8,7 @@ export default vueSsg;
 
 interface vueSsgOption {
 	/** Path of the root component .vue file, or you could also pass a pre-compiled component directly. */
-	appRoot: string | Component;
+	appRoot?: string | Component;
 
 	/** esbuild plugins. You can use any plugin of your choice. */
 	plugins?: Plugin[];

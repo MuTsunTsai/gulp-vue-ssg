@@ -7,7 +7,7 @@ import { createSSRApp, App } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 
 import type { Component } from 'vue';
-import type File from 'vinyl';
+import File from 'vinyl';
 import type { Plugin } from 'esbuild';
 
 function requireFromString(src) {
@@ -19,10 +19,10 @@ function requireFromString(src) {
 }
 
 async function getRoot(options: vueSsgOption) {
-	if(typeof options.appRoot != 'string') return options.appRoot;
-	const result = await esbuild.build({
+	if(typeof options.appRoot == 'object') return options.appRoot;
+	const esbuildOptions: esbuild.BuildOptions = {
 		outfile: 'main.js', // this is necessary for handling sfc containing styles
-		entryPoints: [options.appRoot],
+		entryPoints: [options.appRoot as string],
 		bundle: true,
 		treeShaking: true,
 		format: 'cjs',
@@ -31,8 +31,9 @@ async function getRoot(options: vueSsgOption) {
 		charset: 'utf8',
 		write: false,
 		plugins: options.plugins,
-	});
-	const content = new TextDecoder("utf-8").decode(result.outputFiles[0].contents);
+	};
+	const result = await esbuild.build(esbuildOptions);
+	const content = new TextDecoder("utf-8").decode(result.outputFiles![0].contents);
 	return requireFromString(content).default;
 }
 
@@ -53,11 +54,13 @@ export = function(options: vueSsgOption): stream.Transform {
 			return callback(new PluginError('gulp-vue-ssg', 'Streaming not supported'));
 		}
 
-		const content = file.contents?.toString(encoding || 'utf8') ?? "";
+		const vueMode = file.extname == '.vue' && options.appRoot === undefined;
+		if(vueMode) options.appRoot = file.path;
 
 		renderSSG(options).then(html => {
-			const result = content.replace(options.injectTo ?? '__VUE_SSG__', html);
+			const result = vueMode ? html : (file.contents?.toString(encoding || 'utf8') ?? "").replace(options.injectTo ?? '__VUE_SSG__', html);
 			file.contents = Buffer.from(result, encoding);
+			if(vueMode) file.extname = ".html";
 			cleanup();
 			callback(null, file);
 		});
@@ -66,7 +69,7 @@ export = function(options: vueSsgOption): stream.Transform {
 }
 
 interface vueSsgOption {
-	appRoot: string | Component;
+	appRoot?: string | Component;
 	plugins?: Plugin[];
 	appOptions?: (app: App) => void;
 	injectTo?: string;
