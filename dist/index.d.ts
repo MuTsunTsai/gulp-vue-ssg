@@ -1,6 +1,6 @@
 import type { Transform } from 'stream';
 import type { Plugin } from 'esbuild';
-import type { Component } from 'vue';
+import type { Component, App } from 'vue';
 
 declare const vueSsg: (options: vueSsgOption) => Transform;
 
@@ -12,6 +12,9 @@ interface vueSsgOption {
 
 	/** esbuild plugins. You can use any plugin of your choice. */
 	plugins?: Plugin[];
+
+	/** Additional setups to the created Vue app. */
+	appOptions?: (app: App) => void;
 
 	/** Where to inject the compiled result. Default value is `__VUE_SSG__`. */
 	injectTo?: string;

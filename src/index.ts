@@ -1,16 +1,14 @@
-import through = require('through2');
-import stream = require('stream');
-import PluginError = require('plugin-error');
+import through2 = require('gulp-through2');
 import esbuild = require('esbuild');
 
-import { createSSRApp, App } from 'vue';
-import { renderToString } from 'vue/server-renderer';
+const { createSSRApp } = require('vue');
+const { renderToString } = require('vue/server-renderer');
 
-import type { Component } from 'vue';
-import File from 'vinyl';
+import type stream from 'stream';
+import type { Component, App } from 'vue';
 import type { Plugin } from 'esbuild';
 
-function requireFromString(src) {
+function requireFromString(src: string) {
 	const Module = module.constructor as any;
 	const m = new Module();
 	m.paths = module.paths; // so that node resolves the modules correctly
@@ -48,24 +46,20 @@ async function renderSSG(options: vueSsgOption) {
 export = function(options: vueSsgOption): stream.Transform {
 	const cleanup: () => void = options.useDOM ? require('global-jsdom')() : () => { };
 
-	function transform(this: stream.Transform, file: File, encoding: BufferEncoding, callback: through.TransformCallback) {
-		if(file.isNull()) return callback(null, file);
-		if(file.isStream()) {
-			return callback(new PluginError('gulp-vue-ssg', 'Streaming not supported'));
-		}
+	return through2(
+		async (content, file) => {
+			const vueMode = file.extname == '.vue' && options.appRoot === undefined;
+			if(vueMode) {
+				options.appRoot = file.path;
+				file.extname = ".html";
+			}
 
-		const vueMode = file.extname == '.vue' && options.appRoot === undefined;
-		if(vueMode) options.appRoot = file.path;
-
-		renderSSG(options).then(html => {
-			const result = vueMode ? html : (file.contents?.toString(encoding || 'utf8') ?? "").replace(options.injectTo ?? '__VUE_SSG__', html);
-			file.contents = Buffer.from(result, encoding);
-			if(vueMode) file.extname = ".html";
+			const html = await renderSSG(options);
+			const result = vueMode ? html : content.replace(options.injectTo ?? '__VUE_SSG__', html);
 			cleanup();
-			callback(null, file);
-		});
-	}
-	return through.obj(transform);
+			return result;
+		},
+	);
 }
 
 interface vueSsgOption {

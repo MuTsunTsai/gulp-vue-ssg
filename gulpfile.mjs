@@ -1,16 +1,20 @@
 import gulp from 'gulp';
-import ts from 'gulp-typescript';
-import sourcemaps from 'gulp-sourcemaps';
+import esbuild from 'gulp-esbuild';
 import newer from 'gulp-newer';
 
-const project = ts.createProject("tsconfig.json");
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+
 export default () =>
-	project.src()
+	gulp.src('src/index.ts')
 		.pipe(newer({
 			dest: 'dist/index.js',
-			extra: ['tsconfig.json'],
+			extra: [__filename, 'tsconfig.json'],
 		}))
-		.pipe(sourcemaps.init())
-		.pipe(project())
-		.pipe(sourcemaps.write('.', { includeContent: false }))
+		.pipe(esbuild({
+			format: "cjs",
+			sourcemap: 'linked',
+			sourcesContent: false,
+			sourceRoot: "../src",
+		}))
 		.pipe(gulp.dest('dist'));
