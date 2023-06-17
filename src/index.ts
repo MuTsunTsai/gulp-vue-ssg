@@ -6,7 +6,6 @@ const { renderToString } = require('vue/server-renderer');
 
 import type stream from 'stream';
 import type { Component, App } from 'vue';
-import type { Plugin } from 'esbuild';
 
 function requireFromString(src: string) {
 	const Module = module.constructor as any;
@@ -18,7 +17,7 @@ function requireFromString(src: string) {
 
 async function getRoot(options: vueSsgOption) {
 	if(typeof options.appRoot == 'object') return options.appRoot;
-	const esbuildOptions: esbuild.BuildOptions = {
+	const esbuildOptions: esbuild.BuildOptions = Object.assign({
 		outfile: 'main.js', // this is necessary for handling sfc containing styles
 		entryPoints: [options.appRoot as string],
 		bundle: true,
@@ -28,8 +27,8 @@ async function getRoot(options: vueSsgOption) {
 		external: ['vue'],
 		charset: 'utf8',
 		write: false,
-		plugins: options.plugins,
-	};
+		options: options.plugins,
+	}, options.esbuildOptions);
 	const result = await esbuild.build(esbuildOptions);
 	const content = new TextDecoder("utf-8").decode(result.outputFiles![0].contents);
 	return requireFromString(content).default;
@@ -64,7 +63,8 @@ export = function(options: vueSsgOption): stream.Transform {
 
 interface vueSsgOption {
 	appRoot?: string | Component;
-	plugins?: Plugin[];
+	plugins?: esbuild.Plugin[];
+	esbuildOptions?: esbuild.BuildOptions;
 	appOptions?: (app: App) => void;
 	injectTo?: string;
 	useDOM?: boolean;

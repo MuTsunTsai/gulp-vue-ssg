@@ -29,7 +29,9 @@ import esVue from 'esbuild-plugin-vue-next';
 export default () => gulp.src('src/index.htm')
 	.pipe(ssg({
 		appRoot: 'src/app.vue',
-		plugins: [esVue()],
+		esbuildOptions: {
+			plugins: [esVue()]
+		},
 
 		/**
 		 * Where to inject the compiled result. Optional.

@@ -1,5 +1,5 @@
 import type { Transform } from 'stream';
-import type { Plugin } from 'esbuild';
+import type { Plugin, BuildOptions } from 'esbuild';
 import type { Component, App } from 'vue';
 
 declare const vueSsg: (options: vueSsgOption) => Transform;
@@ -10,8 +10,14 @@ interface vueSsgOption {
 	/** Path of the root component .vue file, or you could also pass a pre-compiled component directly. */
 	appRoot?: string | Component;
 
-	/** esbuild plugins. You can use any plugin of your choice. */
+	/**
+	 * esbuild plugins. You can use any plugin of your choice.
+	 * @deprecated Use {@link esbuildOptions} instead.
+	 */
 	plugins?: Plugin[];
+
+	/** esbuild options to override default settings. */
+	esbuildOptions?: BuildOptions;
 
 	/** Additional setups to the created Vue app. */
 	appOptions?: (app: App) => void;
