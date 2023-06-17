@@ -27,7 +27,7 @@ async function getRoot(options: vueSsgOption) {
 		external: ['vue'],
 		charset: 'utf8',
 		write: false,
-		options: options.plugins,
+		plugins: options.plugins,
 	}, options.esbuildOptions);
 	const result = await esbuild.build(esbuildOptions);
 	const content = new TextDecoder("utf-8").decode(result.outputFiles![0].contents);
