@@ -33,12 +33,12 @@
 	},
 	"peerDependencies": {
 		"esbuild": ">=0.19.9",
-		"gulp": "^5.0.0",
+		"gulp": ">=4.0.0",
 		"vue": "^3.0.0"
 	},
 	"optionalDependencies": {
-		"global-jsdom": "^24.0.0",
-		"jsdom": "^24.0.0"
+		"global-jsdom": ">=24.0.0",
+		"jsdom": ">=24.0.0"
 	},
 	"pnpm": {
 		"overrides": {}
